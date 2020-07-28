@@ -4,6 +4,7 @@ import com.oklimenko.payment.dto.NewPaymentDto;
 import com.oklimenko.payment.dto.SuccessPaymentDto;
 import com.oklimenko.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -17,6 +18,7 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
+    @PreAuthorize("#oauth2.hasScope('write')")
     @PostMapping("/create")
     public SuccessPaymentDto createPayment(@RequestHeader UUID idempotanceKey, @RequestBody NewPaymentDto payment) {
         return paymentService.performPayment(idempotanceKey, payment);
