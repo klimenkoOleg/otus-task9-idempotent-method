@@ -17,7 +17,6 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static com.oklimenko.payment.util.DateFormat.DATE_WITH_TIME_PATTERN;
 import static com.oklimenko.payment.util.DateFormat.TIMEZONE;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.OK;
 
 /**
  * Successful result details
@@ -29,7 +28,9 @@ import static org.springframework.http.HttpStatus.OK;
 @Setter
 @Accessors(chain = true)
 @ToString
-public class Result {
+public class ErrorResult {
+
+    public static final int BUSINESS_STATUS_DUPLICATE_PAYMENT_ERROR = 5005;
 
     @JsonFormat(shape = STRING, pattern = DATE_WITH_TIME_PATTERN, timezone = TIMEZONE)
     private LocalDateTime timestamp;
@@ -50,18 +51,20 @@ public class Result {
      */
     private String debugInfo;
 
-    public static Result ok() {
-        return new Result()
-                .setTimestamp(LocalDateTime.now())
-                .setStatus(OK.value());
-//                .setId(id);
-    }
-
-    public static Result error(String message) {
-        return new Result()
+    public static ErrorResult error(String message) {
+        return new ErrorResult()
                 .setTimestamp(LocalDateTime.now())
                 .setStatus(INTERNAL_SERVER_ERROR.value())
                 .setMessage(message);
+//                .setId(id);
+    }
+
+    public static ErrorResult errorDuplicatePayment(UUID idempotencyKey) {
+        return new ErrorResult()
+                .setTimestamp(LocalDateTime.now())
+                .setStatus(BUSINESS_STATUS_DUPLICATE_PAYMENT_ERROR)
+                .setMessage("Duplicate payment idempotency key")
+                .setId(idempotencyKey);
 //                .setId(id);
     }
 }

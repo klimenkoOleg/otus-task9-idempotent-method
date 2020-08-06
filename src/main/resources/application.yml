@@ -1,5 +1,5 @@
-server.servlet.context-path: /payment
-server.port: 8081
+server.servlet.context-path: /processing
+server.port: 8083
 logging:
   level:
     org:

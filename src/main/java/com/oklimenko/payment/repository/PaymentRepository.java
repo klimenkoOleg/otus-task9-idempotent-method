@@ -8,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface PaymentRepository extends CrudRepository<PaymentEntity, Long> {
+public interface PaymentRepository extends CrudRepository<PaymentEntity, UUID> {
     Optional<PaymentEntity> findByIdempotancyKey(UUID idempotancyKey);
 }

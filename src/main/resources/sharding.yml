@@ -1,0 +1,67 @@
+dataSources:
+  ds0: !!com.zaxxer.hikari.HikariDataSource
+    driverClassName: org.postgresql.Driver
+    jdbcUrl: jdbc:postgresql://localhost:5432/postgres?currentSchema=payment
+    username: postgres
+    password: postgres
+  ds1: !!com.zaxxer.hikari.HikariDataSource
+    driverClassName: org.postgresql.Driver
+    jdbcUrl: jdbc:postgresql://localhost:5432/postgres?currentSchema=payment2
+    username: postgres
+    password: postgres
+#
+#shardingRule:
+#  tables:
+#    payment:
+#      actualDataNodes: ds${0..1}.payment${0..1}
+#      databaseStrategy:
+#        inline:
+#          shardingColumn: client_id
+#          algorithmExpression: ds${client_id % 2}
+#  defaultTableStrategy:
+#    none:
+
+
+
+#      tableStrategy:
+#        inline:
+#          shardingColumn: order_id
+#          algorithmExpression: t_order${client_id % 2}
+#    t_order_item:
+#      actualDataNodes: ds${0..1}.t_order_item${0..1}
+#      databaseStrategy:
+#        inline:
+#          shardingColumn: user_id
+#          algorithmExpression: ds${client_id % 2}
+#      tableStrategy:
+#        inline:
+#          shardingColumn: order_id
+#          algorithmExpression: t_order_item${order_id % 2}
+
+
+shardingRule:
+  tables:
+    payment:
+      actualDataNodes: ds${0..1}.payment
+      keyGenerator:
+        type: SNOWFLAKE
+        column: client_id
+        props:
+          worker.id: 123
+#    t_order_item:
+#      actualDataNodes: ds_${0..1}.t_order_item
+#      keyGenerator:
+#        type: SNOWFLAKE
+#        column: order_item_id
+#        props:
+#          worker.id: 123
+  bindingTables:
+    - payment
+#  broadcastTables:
+#    - t_address
+  defaultDatabaseStrategy:
+    inline:
+      shardingColumn: client_id
+      algorithmExpression: ds${client_id % 2}
+  defaultTableStrategy:
+    none:

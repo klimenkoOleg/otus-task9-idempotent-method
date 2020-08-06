@@ -1,5 +1,3 @@
-server.servlet.context-path: /payment
-server.port: 8081
 logging:
   level:
     org:
@@ -25,21 +23,22 @@ server.tomcat.accesslog.suffix: ""
 server.tomcat.accesslog.file-date-format: ""
 
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=payment2
-    driverClassName: org.postgresql.Driver
-    username: postgres
-    password: postgres
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=payment2
+#    driverClassName: org.postgresql.Driver
+#    username: postgres
+#    password: postgres
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL9Dialect
-        hbm2ddl.auto: validate
+        hbm2ddl.auto: create-drop
+#        hbm2ddl.auto: validate
         show_sql: true
         format_sql: true
-        temp.use_jdbc_metadata_defaults: false
+#        temp.use_jdbc_metadata_defaults: false
   flyway:
-    enabled: true
+    enabled: false
     schemas: payment2
     url: jdbc:postgresql://localhost:5432/postgres
     user: postgres
@@ -58,3 +57,7 @@ spring:
 #server.tomcat.accesslog.enabled: true
 #server.tomcat.accesslog.pattern: "%h %{X-Forwarded-For}i %l %u %t %r %s %b"
 #server.tomcat.accesslog.prefix: tomcat_access_log
+kafka:
+  server: localhost:9092
+  groupId: processingGroupId
+  topic: processing-system-event
