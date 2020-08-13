@@ -31,8 +31,14 @@ spring:
 #    driverClassName: org.postgresql.Driver
 #    username: ${DATABASE_USER}
 #    password: ${DATABASE_PASSWORD}
-#  jpa:
-#    properties:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL9Dialect
+        hbm2ddl.auto: create-drop
+        #        hbm2ddl.auto: validate
+        show_sql: true
+        format_sql: true
 #      hibernate:
 #        dialect: org.hibernate.dialect.PostgreSQL9Dialect
 #        hbm2ddl.auto: validate
@@ -40,8 +46,8 @@ spring:
 #        format_sql: true
 #        temp.use_jdbc_metadata_defaults: false
 #    open-in-view: false
-#  flyway:
-#    enabled: true
+  flyway:
+    enabled: false
 #    schemas: payment
 #    url: ${DATABASE_URI}
 #    user: ${DATABASE_USER}
@@ -67,3 +73,13 @@ security:
     resource:
       jwt:
         key-value: 123
+kafka:
+  server: myapp-kafka:9092
+  groupId: processingGroupId
+  topic: processing-system-event
+
+#Metrics related configurations
+management.endpoint.metrics.enabled: true
+management.endpoints.web.exposure.include: "*"
+management.endpoint.prometheus.enabled: true
+management.metrics.export.prometheus.enabled: true

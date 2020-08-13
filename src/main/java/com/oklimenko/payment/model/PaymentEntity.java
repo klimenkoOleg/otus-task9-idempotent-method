@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -22,6 +23,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Accessors(chain = true)
 @Data
+@DynamicUpdate
 public class PaymentEntity {
     @Id
     @GeneratedValue(generator = "UUID")

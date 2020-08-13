@@ -1,0 +1,32 @@
+dataSources:
+  ds0: !!com.zaxxer.hikari.HikariDataSource
+    driverClassName: org.postgresql.Driver
+    jdbcUrl: jdbc:postgresql://myapp-postgresql:5432/myapp?currentSchema=payment
+    schema: payment
+    username: myuser
+    password: passwd
+  ds1: !!com.zaxxer.hikari.HikariDataSource
+    driverClassName: org.postgresql.Driver
+    jdbcUrl: jdbc:postgresql://myapp-postgresql:5432/myapp?currentSchema=payment2
+    schema: payment2
+    username: myuser
+    password: passwd
+shardingRule:
+  tables:
+    payment:
+      actualDataNodes: ds${0..1}.payment
+      keyGenerator:
+        type: SNOWFLAKE
+        column: client_id
+        props:
+          worker.id: 123
+  bindingTables:
+    - payment
+#  broadcastTables:
+#    - address
+  defaultDatabaseStrategy:
+    inline:
+      shardingColumn: client_id
+      algorithmExpression: ds${client_id % 2}
+  defaultTableStrategy:
+    none:
